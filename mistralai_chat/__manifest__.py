@@ -30,7 +30,7 @@
     ],
     'assets': {
         'web.assets_backend': {
-            'openai_chat/static/src/core/*',
+            'mistralai_chat/static/src/core/*',
         },
     },
     'auto_install': False,

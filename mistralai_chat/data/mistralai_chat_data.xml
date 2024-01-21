@@ -4,13 +4,14 @@
         <record id="mistralai_chat.partner_ai" model="res.partner">
             <field name="name">Mistral AI Bot</field>
             <field name="company_id" ref="base.main_company"/>
-            <field name="email">ai@example.com</field>
+            <field name="email">mistralai@example.com</field>
             <field name="active" eval="False"/>
+            <field name="is_ai_bot" eval="True"/>
             <field name="image_1920" type="base64" file="mistralai_chat/data/mistralai-odoo-avatar.png"/>
         </record>
 
         <record id="mistralai_chat.user_ai" model="res.users">
-            <field name="login">ai</field>
+            <field name="login">mistralai</field>
             <field name="partner_id" ref="mistralai_chat.partner_ai"/>
             <field name="company_id" ref="base.main_company"/>
             <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>

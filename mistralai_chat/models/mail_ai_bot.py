@@ -11,9 +11,9 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class MailBot(models.AbstractModel):
-    _name = 'mail.ai.bot'
-    _description = 'Mail AI Bot'
+class MailMistralAiBot(models.AbstractModel):
+    _name = 'mail.mistralai.bot'
+    _description = 'Mail Mistral AI Bot'
 
     def _answer_to_message(self, record, values):
         ai_bot_id = self.env['ir.model.data']._xmlid_to_res_id('mistralai_chat.partner_ai')

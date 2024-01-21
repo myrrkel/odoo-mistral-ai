@@ -9,5 +9,7 @@ class MailThread(models.AbstractModel):
 
     def _message_post_after_hook(self, message, msg_vals):
         res = super(MailThread, self)._message_post_after_hook(message, msg_vals)
-        self.env['mail.ai.bot']._answer_to_message(self, msg_vals)
+        partner_ai = self.env.ref('mistralai_chat.partner_ai')
+        if partner_ai in self.mapped('channel_member_ids.partner_id'):
+            self.env['mail.mistralai.bot']._answer_to_message(self, msg_vals)
         return res
