@@ -35,7 +35,7 @@ class MailMistralAiBot(models.AbstractModel):
                 message_type = 'comment'
                 subtype_id = self.env['ir.model.data']._xmlid_to_res_id('mail.mt_comment')
                 record = record.with_context(mail_create_nosubscribe=True).sudo()
-                record.message_post(body=answer, author_id=ai_bot_id, message_type=message_type, subtype_id=subtype_id)
+                return record.message_post(body=answer, author_id=ai_bot_id, message_type=message_type, subtype_id=subtype_id)
 
     def get_chat_messages(self, record, header, only_human=False):
         partner_ai_id = self.env.ref('mistralai_chat.partner_ai')

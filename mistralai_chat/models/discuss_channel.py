@@ -1,7 +1,7 @@
 # Copyright (C) 2024 - Michel Perrocheau (https://github.com/myrrkel).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, _
+from odoo import models, fields, api, _
 
 
 class Channel(models.Model):
@@ -23,3 +23,14 @@ class Channel(models.Model):
                     self.env['bus.bus']._sendone(self.env.user.partner_id, 'mail.message/delete',
                                                  {'message_ids': self.message_ids.ids})
                     self.message_ids.unlink()
+
+    @api.returns('mail.message', lambda value: value.id)
+    def message_post(self, **kwargs):
+        message = super(Channel, self).message_post(**kwargs)
+        partner_ai = self.env.ref('mistralai_chat.partner_ai')
+        if self.ai_bot_partner_id == partner_ai:
+            if not message.author_id == partner_ai:
+                msg_vals = {key: val for key, val in kwargs.items()
+                            if key in self.env['mail.message']._fields}
+                message = self.env['mail.mistralai.bot']._answer_to_message(self, msg_vals)
+        return message
