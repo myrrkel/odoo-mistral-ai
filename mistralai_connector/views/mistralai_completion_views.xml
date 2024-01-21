@@ -42,7 +42,7 @@
                             <field name="system_template_id" domain="[('type', '=', 'qweb')]"/>
                         </group>
                         <field name="system_template" widget="ace" options="{'mode': 'xml'}"
-                               attrs="{'invisible': [('system_template_id', '!=', False)]}"/>
+                               invisible="system_template_id != False"/>
                     </group>
 
                     <group name="bottom">
@@ -50,7 +50,7 @@
                             <field name="prompt_template_id" domain="[('type', '=', 'qweb')]"/>
                         </group>
                         <field name="prompt_template" widget="ace" options="{'mode': 'xml'}"
-                               attrs="{'invisible': [('prompt_template_id', '!=', False)]}"/>
+                               invisible="prompt_template_id != False"/>
                     </group>
 
                     <div class="oe_edit_only alert alert-info alert-info-center mt-3" role="alert">
