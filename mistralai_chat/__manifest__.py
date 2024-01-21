@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/algpl.html).
 {
     'name': 'Mistral AI Chat',
-    'version': '16.0.0.0',
+    'version': '17.0.0.0',
     'author': 'Michel Perrocheau',
     'website': 'https://github.com/myrrkel',
     'summary': "Add a Mistral AI Bot user to chat with",
@@ -29,9 +29,9 @@
         'data/mistralai_completion_data.xml',
     ],
     'assets': {
-        'mail.assets_messaging': [
-            'mistralai_chat/static/src/models/messaging_initializer.js',
-        ],
+        'web.assets_backend': {
+            'openai_chat/static/src/core/*',
+        },
     },
     'auto_install': False,
     'installable': True,

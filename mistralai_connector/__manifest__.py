@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     'name': 'Mistral AI Connector',
-    'version': '16.0.0.0',
+    'version': '17.0.0.0',
     'author': 'Michel Perrocheau',
     'website': 'https://github.com/myrrkel',
     'summary': "Connector for Mistral AI API",
