@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/algpl.html).
 {
     'name': 'Mistral AI Chat',
-    'version': '16.0.0.0',
+    'version': '16.0.0.0.1',
     'author': 'Michel Perrocheau',
     'website': 'https://github.com/myrrkel',
     'summary': "Add a Mistral AI Bot user to chat with",
