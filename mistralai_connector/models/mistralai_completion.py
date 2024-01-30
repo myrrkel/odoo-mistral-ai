@@ -51,7 +51,7 @@ class MistralAiCompletion(models.Model):
             if system_prompt:
                 messages.append(ChatMessage(role='system', content=system_prompt))
 
-            if not prompt and rec_id:
+            if not prompt:
                 prompt = self.get_prompt(rec_id)
             messages.append(ChatMessage(role='user', content=prompt))
 
