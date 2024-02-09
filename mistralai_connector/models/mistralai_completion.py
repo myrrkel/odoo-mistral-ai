@@ -37,7 +37,7 @@ class MistralAiCompletion(models.Model):
     system_template = fields.Text()
     system_template_id = fields.Many2one('ir.ui.view', string='System Template View')
     temperature = fields.Float(default=1)
-    max_tokens = fields.Integer(default=16)
+    max_tokens = fields.Integer(default=10000)
     top_p = fields.Float(default=1)
     test_answer = fields.Text(readonly=True)
     post_process = fields.Selection(selection='_get_post_process_list')
@@ -76,8 +76,21 @@ class MistralAiCompletion(models.Model):
                     result_id.exec_post_process(answer)
                 result_ids.append(result_id)
             else:
-                return [choice.message.content for choice in res.choices]
+                try:
+                    return self.get_result_content(res)
+                except Exception as err:
+                    _logger.error(err, exc_info=True)
         return result_ids
+
+    def get_result_content(self, res):
+        def _extract_json(content):
+            start_pos = content.find('{')
+            end_post = content.rfind('}') + 1
+            return content[start_pos:end_post]
+
+        if self.response_format == 'json_object':
+            return [_extract_json(choice.message.content) for choice in res.choices]
+        return [choice.message.content for choice in res.choices]
 
     def mistralai_create(self, rec_id, method=False):
         return self.create_completion(rec_id)
