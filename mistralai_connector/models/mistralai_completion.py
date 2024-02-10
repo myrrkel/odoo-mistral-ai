@@ -55,13 +55,18 @@ class MistralAiCompletion(models.Model):
                 prompt = self.get_prompt(rec_id)
             messages.append(ChatMessage(role='user', content=prompt))
 
-        max_tokens = kwargs.get('max_tokens', self.max_tokens)
+        response_format = {'type': kwargs.get('response_format', self.response_format) or 'text'}
+        model = self.ai_model or kwargs.get('model', 'mistral-medium')
+        temperature = self.temperature or kwargs.get('temperature', 0)
+        top_p = self.top_p or kwargs.get('top_p', 0)
+        max_tokens = kwargs.get('max_tokens', self.max_tokens or 10000)
+        _logger.info(f'Create completion: {messages}')
         res = mistralai.chat(
-            model=self.ai_model,
+            model=model,
             messages=messages,
             max_tokens=max_tokens,
-            temperature=self.temperature,
-            top_p=self.top_p,
+            temperature=temperature,
+            top_p=top_p,
         )
         prompt_tokens = res.usage.prompt_tokens
         completion_tokens = res.usage.completion_tokens
@@ -69,6 +74,7 @@ class MistralAiCompletion(models.Model):
 
         result_ids = []
         for choice in res.choices:
+            _logger.info(f'Completion result: {choice.message.content}')
             if rec_id:
                 answer = choice.message.content
                 result_id = self.create_result(rec_id, prompt, answer, prompt_tokens, completion_tokens, total_tokens)
@@ -77,18 +83,18 @@ class MistralAiCompletion(models.Model):
                 result_ids.append(result_id)
             else:
                 try:
-                    return self.get_result_content(res)
+                    return self.get_result_content(response_format, res)
                 except Exception as err:
                     _logger.error(err, exc_info=True)
         return result_ids
 
-    def get_result_content(self, res):
+    def get_result_content(self, response_format, res):
         def _extract_json(content):
             start_pos = content.find('{')
             end_post = content.rfind('}') + 1
             return content[start_pos:end_post]
 
-        if self.response_format == 'json_object':
+        if response_format.get('type') == 'json_object':
             return [_extract_json(choice.message.content) for choice in res.choices]
         return [choice.message.content for choice in res.choices]
 
